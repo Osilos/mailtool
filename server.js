@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = require("material-ui/styles");
+module.exports = require("react");
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("react");
+module.exports = require("material-ui/styles");
 
 /***/ }),
 /* 2 */
@@ -83,48 +83,54 @@ module.exports = require("material-ui/colors");
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("material-ui");
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _express = __webpack_require__(4);
+var _express = __webpack_require__(5);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _cors = __webpack_require__(5);
+var _cors = __webpack_require__(6);
 
 var _cors2 = _interopRequireDefault(_cors);
 
-var _server = __webpack_require__(6);
+var _server = __webpack_require__(7);
 
-var _App = __webpack_require__(7);
+var _App = __webpack_require__(8);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _serializeJavascript = __webpack_require__(11);
+var _serializeJavascript = __webpack_require__(13);
 
 var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
 
-var _reactRouterDom = __webpack_require__(12);
+var _reactRouterDom = __webpack_require__(14);
 
-var _routes = __webpack_require__(13);
+var _routes = __webpack_require__(15);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _jss = __webpack_require__(14);
+var _jss = __webpack_require__(16);
 
-var _JssProvider = __webpack_require__(15);
+var _JssProvider = __webpack_require__(17);
 
 var _JssProvider2 = _interopRequireDefault(_JssProvider);
 
-var _styles = __webpack_require__(0);
+var _styles = __webpack_require__(1);
 
-var _theme = __webpack_require__(16);
+var _theme = __webpack_require__(18);
 
 var _theme2 = _interopRequireDefault(_theme);
 
@@ -142,17 +148,14 @@ app.listen(3000, function () {
   console.log("Server is listening on port: 3000");
 });
 
-function renderFullPage(html, css, data) {
-  return "\n    <!doctype html>\n    <html>\n      <head>\n        <title>Mail tool</title>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"css/index.css\" media=\"screen\" /> \n        <script src=\"bundle.js\" defer></script>\n        <script>window.__INITIAL_DATA__ = " + (0, _serializeJavascript2.default)(data) + "</script>\n      </head>\n      <body>\n        <div id=\"root\">" + html + "</div>\n        <style id=\"jss-server-side\">" + css + "</style>\n      </body>\n    </html>\n  ";
+function renderFullPage(html, css) {
+  return "\n    <!doctype html>\n    <html>\n      <head>\n        <title>Mail tool</title>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"css/index.css\" media=\"screen\" /> \n        <script src=\"bundle.js\" defer></script>\n      </head>\n      <body>\n        <div id=\"root\">" + html + "</div>\n        <style id=\"jss-server-side\">" + css + "</style>\n      </body>\n    </html>\n  ";
 }
 
 function handleRender(req, res, next) {
 
-  var data = { title: "First Mail", content: 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form: {} };
-  var data1 = { title: "First contact", content: 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form: {}
-
-    // Create a sheetsRegistry instance.
-  };var sheetsRegistry = new _jss.SheetsRegistry();
+  // Create a sheetsRegistry instance.
+  var sheetsRegistry = new _jss.SheetsRegistry();
 
   // Create a theme instance.
 
@@ -166,7 +169,7 @@ function handleRender(req, res, next) {
     _react2.default.createElement(
       _styles.MuiThemeProvider,
       { theme: _theme2.default, sheetsManager: new Map() },
-      _react2.default.createElement(_App2.default, { data: data })
+      _react2.default.createElement(_App2.default, null)
     )
   ));
 
@@ -174,29 +177,29 @@ function handleRender(req, res, next) {
   var css = sheetsRegistry.toString();
 
   // Send the rendered page back to the client.
-  res.send(renderFullPage(html, css, data));
+  res.send(renderFullPage(html, css));
 }
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = require("express");
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("cors");
+module.exports = require("express");
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-dom/server");
+module.exports = require("cors");
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-dom/server");
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -208,27 +211,27 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(8);
+var _reactDom = __webpack_require__(9);
 
-var _styles = __webpack_require__(0);
+var _styles = __webpack_require__(1);
 
 var _colors = __webpack_require__(2);
 
-var _AppBar = __webpack_require__(9);
+var _AppBar = __webpack_require__(10);
 
 var _AppBar2 = _interopRequireDefault(_AppBar);
 
-var _Grid = __webpack_require__(10);
+var _Grid = __webpack_require__(11);
 
 var _Grid2 = _interopRequireDefault(_Grid);
 
-var _materialUi = __webpack_require__(17);
+var _materialUi = __webpack_require__(3);
 
-var _TextInput = __webpack_require__(18);
+var _TextInput = __webpack_require__(12);
 
 var _TextInput2 = _interopRequireDefault(_TextInput);
 
@@ -248,14 +251,15 @@ var App = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
+        var data = { title: "First Mail", content: 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form: {} };
+
         _this.state = {
-            title: props.data.title,
+            title: data.title,
             form: {},
-            formDescription: _this.generateForm(props.data.content),
-            baseContent: props.data.content,
-            content: props.data.content
+            formDescription: _this.generateForm(data.content),
+            baseContent: data.content,
+            content: data.content
         };
-        console.log("COMPONENT CONSTRUCT");
         return _this;
     }
 
@@ -378,102 +382,25 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom");
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = require("material-ui/AppBar");
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("material-ui/Grid");
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = require("serialize-javascript");
-
-/***/ }),
 /* 12 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-router-dom");
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var routes = [{
-    path: '/'
-}, {
-    path: '/first',
-    model: 'first.json'
-}, {
-    path: '/change',
-    model: 'change.json'
-}];
-
-exports.default = routes;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-jss/lib/jss");
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-jss/lib/JssProvider");
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _styles = __webpack_require__(0);
-
-var _colors = __webpack_require__(2);
-
-var theme = (0, _styles.createMuiTheme)({
-    palette: {
-        primary: _colors.green,
-        accent: _colors.red,
-        type: "light"
-    }
-});
-
-exports.default = theme;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = require("material-ui");
-
-/***/ }),
-/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -485,11 +412,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _materialUi = __webpack_require__(17);
+var _materialUi = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -519,6 +446,77 @@ var TextInput = function (_Component) {
 }(_react.Component);
 
 exports.default = TextInput;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var routes = [{
+    path: '/'
+}, {
+    path: '/first',
+    model: 'first.json'
+}, {
+    path: '/change',
+    model: 'change.json'
+}];
+
+exports.default = routes;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-jss/lib/jss");
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-jss/lib/JssProvider");
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _styles = __webpack_require__(1);
+
+var _colors = __webpack_require__(2);
+
+var theme = (0, _styles.createMuiTheme)({
+    palette: {
+        primary: _colors.green,
+        accent: _colors.red,
+        type: "light"
+    }
+});
+
+exports.default = theme;
 
 /***/ })
 /******/ ]);

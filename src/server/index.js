@@ -25,7 +25,7 @@ app.listen(3000, () => {
 });
 
 
-function renderFullPage(html, css, data) {
+function renderFullPage(html, css) {
   return `
     <!doctype html>
     <html>
@@ -33,7 +33,6 @@ function renderFullPage(html, css, data) {
         <title>Mail tool</title>
         <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" /> 
         <script src="bundle.js" defer></script>
-        <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
       </head>
       <body>
         <div id="root">${html}</div>
@@ -44,9 +43,6 @@ function renderFullPage(html, css, data) {
 }
 
 function handleRender(req, res, next) {
-
-  const data = {title : "First Mail", content : 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form : {}}
-  const data1 = {title : "First contact", content : 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form : {}}
 
   // Create a sheetsRegistry instance.
   const sheetsRegistry = new SheetsRegistry();
@@ -60,7 +56,7 @@ function handleRender(req, res, next) {
   const html = renderToString(
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
-        <App data={data}/>
+        <App />
       </MuiThemeProvider>
     </JssProvider>
   )
@@ -69,7 +65,7 @@ function handleRender(req, res, next) {
   const css = sheetsRegistry.toString()
 
   // Send the rendered page back to the client.
-  res.send(renderFullPage(html, css, data))
+  res.send(renderFullPage(html, css))
 }
 
 

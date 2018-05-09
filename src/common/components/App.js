@@ -11,20 +11,19 @@ import TextInput from "./TextInput";
 class App extends Component {
     constructor(props) {
         super();
+        const data = {title : "First Mail", content : 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form : {}}
+
         this.state = {
-            title : props.data.title,
+            title : data.title,
             form : {},
-            formDescription : this.generateForm(props.data.content),
-            baseContent : props.data.content,
-            content : props.data.content
+            formDescription : this.generateForm(data.content),
+            baseContent : data.content,
+            content : data.content
         };
-        console.log("COMPONENT CONSTRUCT");
     }
 
     componentWillMount() {
         this.setState({content : this.generateContent(this.state.baseContent)});
-        
-        
     }
 
     generateForm(content) {

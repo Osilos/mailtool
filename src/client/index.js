@@ -34,7 +34,7 @@ if (__PRODUCTION__) {
 function hydratePage () {
   hydrate(
     <MuiThemeProvider theme={theme}>
-      <Main data={ window.__INITIAL_DATA__ } />
+      <Main />
     </MuiThemeProvider>,
     document.querySelector('#root'),
   );
