@@ -1,0 +1,22 @@
+html, body {
+    margin: 0px;
+}
+
+.header {
+    height: 50px;
+    display: flex !important;
+    justify-content: center;
+    position: relative !important;
+}
+
+.sideForm {
+    padding: 10px;
+    z-index: 5;
+}
+
+.mailContainer {
+    padding: 10px;
+    cursor: disable;
+    z-index: 0;
+    margin-left:10px;
+}
