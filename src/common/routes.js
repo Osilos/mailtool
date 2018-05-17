@@ -1,14 +1,12 @@
 const routes = [
     {
         path: '/',
-    },
-    {
-        path: '/first',
-        model: 'first.json'
+        exact: true,
+        apiData: '/data'
     },
     {
         path: '/change',
-        model: 'change.json'
+        apiData: '/data2'
     }
 ]
 

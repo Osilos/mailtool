@@ -7,31 +7,37 @@ import Grid from "material-ui/Grid";
 import { Typography } from "material-ui";
 import { Paper } from "material-ui";
 import TextInput from "./TextInput";
-import axios from 'axios';
-import data from '../../server/data';
+import { BrowserRouter } from "react-router-dom";
+import MainMenu from "./MainMenu";
 
 class App extends Component {
     constructor(props) {
         super();
+        this.props = props;
+        this.baseContent = props.data.content;
+
         this.state = {
-                title: "loading",
-                form: {},
-                formDescription: [],
-                baseContent: "loading",
-                content: "loading"
-            };
+            title: "loading",
+            form: {},
+            formDescription: [],
+            content: "loading"
+        };
     }
 
     componentWillMount () {
+        this.setInitialState(this.props);
+    }
+
+    componentDidMount () {
+        console.log("test " + this.state.title);
     }
 
     setInitialState (data) {
         this.setState({
-            title: data.title,
+            title: data.data.title,
             form: {},
-            formDescription: this.generateForm(data.content),
-            baseContent: data.content,
-            content: this.generateContent(data.content)
+            formDescription: this.generateForm(this.baseContent),
+            content: this.generateContent(this.baseContent)
         });
     }
 
@@ -72,7 +78,7 @@ class App extends Component {
         this.setState(() => {
             return {
                 form: form,
-                content: this.generateContent(this.state.baseContent)
+                content: this.generateContent(this.baseContent)
             };
         });
     }
@@ -95,6 +101,7 @@ class App extends Component {
         return (
             <div>
                 <Grid container>
+                <MainMenu/>
                     <Grid item container xs={12}>
                         <AppBar className="header" elevation={10}>
                             <Typography align="center" variant={"title"}>

@@ -10,7 +10,6 @@ import { SheetsRegistry } from "react-jss/lib/jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { MuiThemeProvider, createGenerateClassName } from "material-ui/styles";
 import theme from "../common/theme";
-import data from "./data";
 import axios from "axios";
 
 const app = express();
@@ -19,13 +18,13 @@ app.use(cors());
 
 app.use(express.static("public"));
 
-app.get("/", handleRender);
+app.get("*", handleRequest);
 
 app.listen(3000, () => {
     console.log(`Server is listening on port: 3000`);
 });
 
-function renderFullPage(html, css) {
+function renderFullPage(html, css, data) {
     return `
     <!doctype html>
     <html>
@@ -33,39 +32,50 @@ function renderFullPage(html, css) {
         <title>Mail tool</title>
         <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" /> 
         <script src="bundle.js" defer></script>
+        <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
       </head>
       <body>
         <div id="root">${html}</div>
-        <div id="data">${JSON.stringify(data.data)}</div>
         <style id="jss-server-side">${css}</style>
       </body>
     </html>
   `;
 }
 
-function handleRender(req, res, next) {
+function handleRequest(req, res, next) {
     // Create a sheetsRegistry instance.
     const sheetsRegistry = new SheetsRegistry();
 
     // Create a theme instance.
     const generateClassName = createGenerateClassName();
 
-    let html, css;
+    const activeRoute = routes.find(
+        (route) => matchPath(req.url, route)
+    ) || {};
 
-    html = renderToString(
-        <JssProvider
-            registry={sheetsRegistry}
-            generateClassName={generateClassName}
-        >
-            <MuiThemeProvider
-                theme={theme}
-                sheetsManager={new Map()}
+    console.log(activeRoute.apiData);
+    const promise = activeRoute.apiData ? axios.get('http://localhost:3001'+activeRoute.apiData) : Promise.resolve();
+
+    promise.then((data) => {
+        let html, css;
+
+        html = renderToString(
+            <StaticRouter location={req.url} context={{}}>
+            <JssProvider
+                registry={sheetsRegistry}
+                generateClassName={generateClassName}
             >
-                <App />
-            </MuiThemeProvider>
-        </JssProvider>
-    );
-    css = sheetsRegistry.toString();
-
-    res.send(renderFullPage(html, css));
+                <MuiThemeProvider
+                    theme={theme}
+                    sheetsManager={new Map()}
+                >
+                    <App data={data.data}/>
+                </MuiThemeProvider>
+            </JssProvider>
+            </StaticRouter>
+        );
+        css = sheetsRegistry.toString();
+    
+        res.send(renderFullPage(html, css, data.data));
+    }).catch(next);
 }
