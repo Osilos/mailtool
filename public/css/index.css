@@ -20,3 +20,7 @@ html, body {
     z-index: 0;
     margin-left:10px;
 }
+
+#data {
+    display: none;
+}

@@ -21,6 +21,8 @@ class Main extends React.Component {
   }
 }
 
+
+
 if (__PRODUCTION__) {
   hydratePage();
 } else {
@@ -32,6 +34,10 @@ if (__PRODUCTION__) {
 
 
 function hydratePage () {
+
+  console.log(document.getElementById(data));
+  window.data = JSON.parse(document.getElementById(data).innerHTML);
+
   hydrate(
     <MuiThemeProvider theme={theme}>
       <Main />

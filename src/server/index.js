@@ -6,10 +6,12 @@ import React from "react";
 import serialize from "serialize-javascript";
 import { StaticRouter, matchPath } from "react-router-dom";
 import routes from "../common/routes";
-import { SheetsRegistry } from 'react-jss/lib/jss';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { MuiThemeProvider, createGenerateClassName } from 'material-ui/styles';
-import theme from '../common/theme';
+import { SheetsRegistry } from "react-jss/lib/jss";
+import JssProvider from "react-jss/lib/JssProvider";
+import { MuiThemeProvider, createGenerateClassName } from "material-ui/styles";
+import theme from "../common/theme";
+import data from "./data";
+import axios from "axios";
 
 const app = express();
 
@@ -17,16 +19,14 @@ app.use(cors());
 
 app.use(express.static("public"));
 
-app.get("*", handleRender)
-
+app.get("/", handleRender);
 
 app.listen(3000, () => {
-  console.log(`Server is listening on port: 3000`);
+    console.log(`Server is listening on port: 3000`);
 });
 
-
 function renderFullPage(html, css) {
-  return `
+    return `
     <!doctype html>
     <html>
       <head>
@@ -36,6 +36,7 @@ function renderFullPage(html, css) {
       </head>
       <body>
         <div id="root">${html}</div>
+        <div id="data">${JSON.stringify(data.data)}</div>
         <style id="jss-server-side">${css}</style>
       </body>
     </html>
@@ -43,29 +44,28 @@ function renderFullPage(html, css) {
 }
 
 function handleRender(req, res, next) {
+    // Create a sheetsRegistry instance.
+    const sheetsRegistry = new SheetsRegistry();
 
-  // Create a sheetsRegistry instance.
-  const sheetsRegistry = new SheetsRegistry();
+    // Create a theme instance.
+    const generateClassName = createGenerateClassName();
 
-  // Create a theme instance.
+    let html, css;
 
+    html = renderToString(
+        <JssProvider
+            registry={sheetsRegistry}
+            generateClassName={generateClassName}
+        >
+            <MuiThemeProvider
+                theme={theme}
+                sheetsManager={new Map()}
+            >
+                <App />
+            </MuiThemeProvider>
+        </JssProvider>
+    );
+    css = sheetsRegistry.toString();
 
-  const generateClassName = createGenerateClassName();
-
-  // Render the component to a string.
-  const html = renderToString(
-    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
-        <App />
-      </MuiThemeProvider>
-    </JssProvider>
-  )
-
-  // Grab the CSS from our sheetsRegistry.
-  const css = sheetsRegistry.toString()
-
-  // Send the rendered page back to the client.
-  res.send(renderFullPage(html, css))
+    res.send(renderFullPage(html, css));
 }
-
-

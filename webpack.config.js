@@ -9,6 +9,7 @@ var browserConfig = {
         filename: "bundle.js",
         publicPath: "/"
     },
+    devtool: 'cheap-module-eval-ource-map',
     module: {
       rules: [
         {
@@ -39,6 +40,7 @@ var serverConfig = {
         filename: "server.js",
         publicPath: "/"
     },
+    devtool: 'cheap-module-eval-ource-map',
     module: {
       rules: [
         {
@@ -56,4 +58,30 @@ var serverConfig = {
     ]
 };
 
-module.exports = [browserConfig, serverConfig];
+var apiConfig = {
+    entry: "./src/api/index.js",
+    target: "node",
+    externals: [nodeExternals()],
+    output: {
+        path: __dirname,
+        filename: "api.js",
+        publicPath: "/"
+    },
+    devtool: 'cheap-module-eval-ource-map',
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: ['babel-loader']
+        }
+      ]
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            __PRODUCTION__ : JSON.stringify(false) 
+        })
+    ]
+};
+
+module.exports = [browserConfig, serverConfig, apiConfig];

@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack -w | nodemon server.js",
+    "api": "nodemon api.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -29,6 +30,8 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.15.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "isomorphic-fetch": "^2.2.1",

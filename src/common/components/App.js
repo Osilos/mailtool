@@ -7,23 +7,32 @@ import Grid from "material-ui/Grid";
 import { Typography } from "material-ui";
 import { Paper } from "material-ui";
 import TextInput from "./TextInput";
+import axios from 'axios';
+import data from '../../server/data';
 
 class App extends Component {
     constructor(props) {
         super();
-        const data = {title : "First Mail", content : 'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien', form : {}}
-
         this.state = {
-            title : data.title,
-            form : {},
-            formDescription : this.generateForm(data.content),
-            baseContent : data.content,
-            content : data.content
-        };
+                title: "loading",
+                form: {},
+                formDescription: [],
+                baseContent: "loading",
+                content: "loading"
+            };
     }
 
-    componentWillMount() {
-        this.setState({content : this.generateContent(this.state.baseContent)});
+    componentWillMount () {
+    }
+
+    setInitialState (data) {
+        this.setState({
+            title: data.title,
+            form: {},
+            formDescription: this.generateForm(data.content),
+            baseContent: data.content,
+            content: this.generateContent(data.content)
+        });
     }
 
     generateForm(content) {
@@ -52,7 +61,8 @@ class App extends Component {
                 );
                 break;
             default:
-                throw "Sorry we run I a problem, please reload the page. INFO : no match type for " + input.type;
+                throw "Sorry we run I a problem, please reload the page. INFO : no match type for " +
+                    input.type;
         }
     }
 
@@ -63,7 +73,7 @@ class App extends Component {
             return {
                 form: form,
                 content: this.generateContent(this.state.baseContent)
-            }
+            };
         });
     }
 
@@ -94,7 +104,9 @@ class App extends Component {
                     </Grid>
                     <Grid item xs={4}>
                         <Paper square className="sideForm" elevation={5}>
-                            {this.state.formDescription.map(item => this.createInput(item))}
+                            {this.state.formDescription.map(item =>
+                                this.createInput(item)
+                            )}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
