@@ -1,13 +1,19 @@
+import TemplateForm from './components/TemplateForm';
+import Home from './components/Home';
+import { fetchTemplateData } from './api';
+
 const routes = [
     {
         path: '/',
         exact: true,
-        apiData: '/data'
+        component: Home
     },
     {
-        path: '/change',
-        apiData: '/data2'
+        path: '/template/:name',
+        exact: true,
+        component: TemplateForm,
+        getInitialData: (path = '') => fetchTemplateData(path.split('/').pop())
     }
-]
+];
 
 export default routes;

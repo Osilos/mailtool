@@ -1,14 +1,14 @@
-import express from "express";
-import bodyParser from "body-parser";
+import express from 'express';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3001;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/data", (req, res) => {
+app.get('/first', (req, res) => {
     const data = {
-        title: "First Mail",
+        title: 'First Mail',
         content:
             'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien',
         form: {}
@@ -16,9 +16,9 @@ app.get("/data", (req, res) => {
     res.send(data);
 });
 
-app.get("/data2", (req, res) => {
+app.get('/second', (req, res) => {
     const data = {
-        title: "Second Mail",
+        title: 'Second Mail',
         content:
             'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Henri',
         form: {}
@@ -27,5 +27,5 @@ app.get("/data2", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log("API server is live on " + port);
+    console.log('API server is live on ' + port);
 });
