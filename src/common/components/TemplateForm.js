@@ -5,6 +5,7 @@ import { Typography, Paper, Snackbar } from 'material-ui';
 import { yellow } from 'material-ui/colors';
 import TextInput from './TextInput';
 import { Button } from 'material-ui';
+import ScheduleInput from './ScheduleInput';
 
 const headerStyle = {
     backgroundColor: yellow['600'],
@@ -110,7 +111,7 @@ class TemplateForm extends Component {
                         key={input.id}
                         id={input.id}
                         default={input.default}
-                        onChange={this.handleTextChange.bind(this)}
+                        onChange={this.handleTextInputChange.bind(this)}
                     />
                 );
                 break;
@@ -120,7 +121,7 @@ class TemplateForm extends Component {
         }
     }
 
-    handleTextChange(e) {
+    handleTextInputChange(e) {
         const values = this.state.values;
         values[e.target.id] = e.target.value;
         this.setState(() => {
@@ -185,6 +186,7 @@ class TemplateForm extends Component {
                 <Grid item xs={4}>
                     <Paper square className="sideForm" elevation={0}>
                         {this.inputs.map(item => this.createInput(item))}
+                        <ScheduleInput start={9} end={18} delta={1} />
                     </Paper>
                 </Grid>
                 <Grid item xs={8}>
