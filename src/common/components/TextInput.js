@@ -1,10 +1,17 @@
-import React, { Component } from "react";
-import { TextField } from "material-ui";
+import React, { Component } from 'react';
+import { TextField } from 'material-ui';
 
 class TextInput extends Component {
-    
-    render () {
-        return <TextField id={this.props.id} type="text" defaultValue={this.props.default} onChange={this.props.onChange} />
+    render() {
+        return (
+            <TextField
+                label={this.props.id}
+                id={this.props.id}
+                type="text"
+                defaultValue={this.props.default}
+                onChange={this.props.onChange}
+            />
+        );
     }
 }
 

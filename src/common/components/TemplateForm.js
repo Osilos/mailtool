@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 import AppBar from 'material-ui/AppBar';
-import { Typography, Paper } from 'material-ui';
-import { green } from 'material-ui/colors';
+import { Typography, Paper, Snackbar } from 'material-ui';
+import { yellow } from 'material-ui/colors';
 import TextInput from './TextInput';
+import { Button } from 'material-ui';
 
 const headerStyle = {
-    backgroundColor: green['600'],
+    backgroundColor: yellow['600'],
     height: '50px'
+};
+
+const copyButtonStyle = {
+    marginTop: '50px'
 };
 
 class TemplateForm extends Component {
@@ -56,7 +61,6 @@ class TemplateForm extends Component {
     }
 
     getTemplateData(name) {
-        console.log('lol');
         this.setState(() => ({
             loading: true
         }));
@@ -147,22 +151,69 @@ class TemplateForm extends Component {
         );
     }
 
+    handleButtonCopy() {
+        const element = document.createElement('textarea');
+        element.value = this.state.content;
+        element.setAttribute('readonly', '');
+        element.style.position = 'absolute';
+        element.style.left = '-9999px';
+        document.body.appendChild(element);
+        const selected =
+            document.getSelection().rangeCount > 0
+                ? document.getSelection().getRangeAt(0)
+                : false;
+        element.select();
+        document.execCommand('copy');
+        document.body.removeChild(element);
+        if (selected) {
+            document.getSelection().removeAllRanges();
+            document.getSelection().addRange(selected);
+        }
+        this.setState({ openCopyMessage: true });
+    }
+
     render() {
         if (this.state.loading) {
             this.getHeader('Loading...');
         }
 
-        return (
+        return this.state.loading ? (
+            this.getHeader('loading')
+        ) : (
             <Grid container item xs={12}>
                 {this.getHeader(this.data.title)}
                 <Grid item xs={4}>
-                    <Paper square className="sideForm" elevation={5}>
+                    <Paper square className="sideForm" elevation={0}>
                         {this.inputs.map(item => this.createInput(item))}
                     </Paper>
                 </Grid>
                 <Grid item xs={8}>
-                    <Paper square elevation={0} className="mailContainer">
+                    <Paper square elevation={5} className="mailContainer">
                         {this.state.content}
+                        <Button
+                            onClick={this.handleButtonCopy.bind(this)}
+                            style={copyButtonStyle}
+                            fullWidth={true}
+                            color="primary"
+                            variant="raised"
+                            children={'COPY'}
+                        />
+                        {this.state.openCopyMessage && (
+                            <Snackbar
+                                anchorOrigin={{
+                                    horizontal: 'left',
+                                    vertical: 'bottom'
+                                }}
+                                open={true}
+                                autoHideDuration={3000}
+                                message={
+                                    'Congrats ! Your mail has been well saved in your clipboard.'
+                                }
+                                onClose={() => {
+                                    this.setState({ openCopyMessage: false });
+                                }}
+                            />
+                        )}
                     </Paper>
                 </Grid>
             </Grid>
