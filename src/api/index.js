@@ -10,7 +10,7 @@ app.get('/first', (req, res) => {
     const data = {
         title: 'First Mail',
         content:
-            'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien',
+            'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien %%{"type":"schedule", "id": "planning"}%%',
         form: {}
     };
     res.send(data);

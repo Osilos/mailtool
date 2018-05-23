@@ -77,17 +77,52 @@ class TemplateForm extends Component {
     }
 
     generateContent(content) {
-        let inputs = content.split('%%');
-        for (let i = inputs.length - 2; i >= 0; i -= 2) {
-            let parsedinput = JSON.parse(inputs[i]);
-            if (this.state.values[parsedinput.id]) {
-                inputs[i] = this.state.values[parsedinput.id];
+        const inputs = content.split('%%');
+        let i = 0;
+        return inputs.map(input => {
+            if (i++ % 2 == 0) {
+                return <span key={i}>{input}</span>;
             } else {
-                inputs[i] = parsedinput.default;
+                let parsedinput = JSON.parse(input);
+                let value = '';
+                if (this.state.values[parsedinput.id]) {
+                    value = this.state.values[parsedinput.id];
+                } else if (parsedinput.default) {
+                    value = parsedinput.default;
+                }
+                switch (parsedinput.type) {
+                    case 'text':
+                        return <span key={i}>{value}</span>;
+                        break;
+                    case 'schedule':
+                        return (
+                            <span key={i}>
+                                {this.computeSheduleToDisplay(value)}
+                            </span>
+                        );
+                        break;
+                    default:
+                        return <span key={i}>{value}</span>;
+                }
             }
-        }
+        });
+    }
 
-        return inputs.join('');
+    computeSheduleToDisplay(shedule) {
+        return (
+            <ul>
+                {Object.entries(shedule).map(el => {
+                    return (
+                        <li key={el[0]}>
+                            <strong>{el[0]}</strong> :{' '}
+                            {el[1].map(hour => {
+                                return hour + 'h, ';
+                            })}
+                        </li>
+                    );
+                })}
+            </ul>
+        );
     }
 
     generateInputs(content) {
@@ -115,6 +150,17 @@ class TemplateForm extends Component {
                     />
                 );
                 break;
+            case 'schedule':
+                return (
+                    <ScheduleInput
+                        key={input.id}
+                        start={9}
+                        end={18}
+                        delta={1}
+                        id="planning"
+                        onChange={this.handleScheduleChange.bind(this)}
+                    />
+                );
             default:
                 throw 'Sorry we run I a problem, please reload the page. INFO : no match type for ' +
                     input.type;
@@ -173,6 +219,17 @@ class TemplateForm extends Component {
         this.setState({ openCopyMessage: true });
     }
 
+    handleScheduleChange(id, value) {
+        const values = this.state.values;
+        values[id] = value;
+        this.setState(() => {
+            return {
+                values: values,
+                content: this.generateContent(this.data.content)
+            };
+        });
+    }
+
     render() {
         if (this.state.loading) {
             this.getHeader('Loading...');
@@ -186,7 +243,6 @@ class TemplateForm extends Component {
                 <Grid item xs={4}>
                     <Paper square className="sideForm" elevation={0}>
                         {this.inputs.map(item => this.createInput(item))}
-                        <ScheduleInput start={9} end={18} delta={1} />
                     </Paper>
                 </Grid>
                 <Grid item xs={8}>
