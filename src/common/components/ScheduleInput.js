@@ -3,6 +3,8 @@ import { FormControl } from 'material-ui';
 import { FormLabel } from 'material-ui';
 import { Checkbox } from 'material-ui';
 import { FormGroup } from 'material-ui';
+import PropTypes from 'prop-types';
+import weekDays from '../constants/weekDays';
 
 const checkboxStyle = {
     width: '20px',
@@ -21,16 +23,6 @@ const containerBoxStyle = {
 const labelTitleStyle = {
     fontSize: '32px'
 };
-
-const weekDays = [
-    'Lundi',
-    'Mardi',
-    'Mercredi',
-    'Jeudi',
-    'Vendredi',
-    'Samedi',
-    'Dimanche'
-];
 
 class ScheduleInput extends Component {
     constructor(props) {
@@ -119,5 +111,13 @@ class ScheduleInput extends Component {
         );
     }
 }
+
+ScheduleInput.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    start: PropTypes.number.isRequired,
+    end: PropTypes.number.isRequired,
+    delta: PropTypes.number.isRequired
+};
 
 export default ScheduleInput;

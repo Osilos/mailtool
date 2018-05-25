@@ -199,23 +199,25 @@ class TemplateForm extends Component {
     }
 
     handleButtonCopy() {
-        const element = document.createElement('textarea');
-        element.value = this.state.content;
-        element.setAttribute('readonly', '');
-        element.style.position = 'absolute';
-        element.style.left = '-9999px';
-        document.body.appendChild(element);
+        const content = document.getElementById('mailContent');
+
         const selected =
             document.getSelection().rangeCount > 0
                 ? document.getSelection().getRangeAt(0)
                 : false;
-        element.select();
+
+        document.getSelection().removeAllRanges();
+        const range = new Range();
+        range.setStart(content, 0);
+        range.setEnd(content, content.childNodes.length);
+        document.getSelection().addRange(range);
         document.execCommand('copy');
-        document.body.removeChild(element);
+
+        document.getSelection().removeAllRanges();
         if (selected) {
-            document.getSelection().removeAllRanges();
             document.getSelection().addRange(selected);
         }
+
         this.setState({ openCopyMessage: true });
     }
 
@@ -246,8 +248,14 @@ class TemplateForm extends Component {
                     </Paper>
                 </Grid>
                 <Grid item xs={8}>
-                    <Paper square elevation={5} className="mailContainer">
+                    <Paper
+                        square
+                        elevation={5}
+                        className="mailContainer"
+                        id="mailContent"
+                    >
                         {this.state.content}
+
                         <Button
                             onClick={this.handleButtonCopy.bind(this)}
                             style={copyButtonStyle}
