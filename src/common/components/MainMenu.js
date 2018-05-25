@@ -1,14 +1,80 @@
 import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
 import Grid from 'material-ui/Grid';
-import { Link } from 'react-router-dom';
+import Button from 'material-ui/Button';
+import { Link, NavLink } from 'react-router-dom';
+import { Toolbar, IconButton, Icon } from 'material-ui';
+
+const headerStyle = {};
+
+const elementStyle = {
+    color: 'inherit'
+};
+const toolBarStyle = {
+    display: 'flex',
+    justifyContent: 'space-between'
+};
 
 class MainMenu extends Component {
+    isHomeActive(match, location) {
+        if (!match) {
+            return false;
+        }
+        if (location.pathname === match.path) return true;
+        if (location.pathname === '/') return true;
+        return false;
+    }
+
     render() {
         return (
             <Grid item container xs={12}>
-                <Link to="/template/first">FIRST</Link>
-                <Link to="/template/second">SECOND</Link>
+                <AppBar position="static">
+                    <Toolbar style={toolBarStyle}>
+                        <div>
+                            <NavLink
+                                to="/home"
+                                activeStyle={{
+                                    color: 'white'
+                                }}
+                                isActive={this.isHomeActive.bind(this)}
+                            >
+                                <IconButton style={elementStyle}>
+                                    <Icon style={elementStyle}>home</Icon>
+                                </IconButton>
+                            </NavLink>
+                            <NavLink
+                                to="/help"
+                                activeStyle={{
+                                    color: 'white'
+                                }}
+                            >
+                                <IconButton style={elementStyle}>
+                                    <Icon style={elementStyle}>help</Icon>
+                                </IconButton>
+                            </NavLink>
+                            <NavLink
+                                activeStyle={{ color: 'white' }}
+                                to="/template/demo"
+                            >
+                                <Button style={elementStyle}>Demo</Button>
+                            </NavLink>
+                        </div>
+                        <div>
+                            <NavLink
+                                activeStyle={{ color: 'white' }}
+                                to="/signin"
+                            >
+                                <Button style={elementStyle}>Sign In</Button>
+                            </NavLink>
+                            <NavLink
+                                activeStyle={{ color: 'white' }}
+                                to="/signup"
+                            >
+                                <Button style={elementStyle}>Sign up</Button>
+                            </NavLink>
+                        </div>
+                    </Toolbar>
+                </AppBar>
             </Grid>
         );
     }

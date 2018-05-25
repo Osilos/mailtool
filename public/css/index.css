@@ -12,9 +12,8 @@ body {
     padding: 10px;
     cursor: disable;
     z-index: 0;
-    margin-left: 10px;
 }
 
-#data {
-    display: none;
+a {
+    all: unset;
 }

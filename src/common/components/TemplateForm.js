@@ -2,15 +2,24 @@ import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 import AppBar from 'material-ui/AppBar';
 import { Typography, Paper, Snackbar } from 'material-ui';
-import { yellow } from 'material-ui/colors';
+import { green, red, orange } from 'material-ui/colors';
 import TextInput from './TextInput';
 import { Button } from 'material-ui';
 import ScheduleInput from './ScheduleInput';
 import weekDays from '../constants/weekDays';
 
-const headerStyle = {
-    backgroundColor: yellow['600'],
+const titleStyle = {
+    backgroundColor: green['600'],
     height: '50px'
+};
+
+const deleteButton = {
+    backgroundColor: red['600'],
+    height: '50px'
+};
+
+const editButton = {
+    backgroundColor: orange['600']
 };
 
 const copyButtonStyle = {
@@ -188,10 +197,32 @@ class TemplateForm extends Component {
                     className="template-header"
                     item
                     container
-                    xs={12}
+                    xs={2}
                     justify="center"
                     alignItems="center"
-                    style={headerStyle}
+                    style={editButton}
+                >
+                    <Button fullWidth={true}>Edit</Button>
+                </Grid>
+                <Grid
+                    className="template-header"
+                    item
+                    container
+                    xs={2}
+                    justify="center"
+                    alignItems="center"
+                    style={deleteButton}
+                >
+                    <Button fullWidth={true}>Delete</Button>
+                </Grid>
+                <Grid
+                    className="template-header"
+                    item
+                    container
+                    xs={8}
+                    justify="center"
+                    alignItems="center"
+                    style={titleStyle}
                 >
                     <Typography align="center" variant={'title'}>
                         {title}
@@ -246,14 +277,14 @@ class TemplateForm extends Component {
             <Grid container item xs={12}>
                 {this.getHeader(this.data.title)}
                 <Grid item xs={4}>
-                    <Paper square className="sideForm" elevation={0}>
+                    <Paper square elevation={5} className="sideForm">
                         {this.inputs.map(item => this.createInput(item))}
                     </Paper>
                 </Grid>
                 <Grid item xs={8}>
                     <Paper
                         square
-                        elevation={5}
+                        elevation={2}
                         className="mailContainer"
                         id="mailContent"
                     >

@@ -10,7 +10,6 @@ import routes from '../routes';
 class App extends Component {
     constructor(props) {
         super();
-        //console.log(props.data);
     }
 
     render() {

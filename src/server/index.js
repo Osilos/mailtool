@@ -33,6 +33,7 @@ function renderFullPage(html, css, data) {
         <link rel="stylesheet" type="text/css" href="/css/index.css" media="screen" /> 
         <script src="/bundle.js" defer></script>
         <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       </head>
       <body>
         <div id="root">${html}</div>

@@ -16,6 +16,16 @@ app.get('/first', (req, res) => {
     res.send(data);
 });
 
+app.get('/demo', (req, res) => {
+    const data = {
+        title: 'Demo Mail',
+        content:
+            'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien %%{"type":"schedule", "id": "planning"}%%',
+        form: {}
+    };
+    res.send(data);
+});
+
 app.get('/second', (req, res) => {
     const data = {
         title: 'Second Mail',
