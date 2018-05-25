@@ -6,6 +6,7 @@ import { yellow } from 'material-ui/colors';
 import TextInput from './TextInput';
 import { Button } from 'material-ui';
 import ScheduleInput from './ScheduleInput';
+import weekDays from '../constants/weekDays';
 
 const headerStyle = {
     backgroundColor: yellow['600'],
@@ -111,15 +112,17 @@ class TemplateForm extends Component {
     computeSheduleToDisplay(shedule) {
         return (
             <ul>
-                {Object.entries(shedule).map(el => {
-                    return (
-                        <li key={el[0]}>
-                            <strong>{el[0]}</strong> :{' '}
-                            {el[1].map(hour => {
-                                return hour + 'h, ';
-                            })}
-                        </li>
-                    );
+                {weekDays.map(day => {
+                    if (shedule[day]) {
+                        return (
+                            <li key={day}>
+                                <strong>{day}</strong> :
+                                {shedule[day].map(hour => {
+                                    return ' ' + hour + 'h /';
+                                })}
+                            </li>
+                        );
+                    }
                 })}
             </ul>
         );

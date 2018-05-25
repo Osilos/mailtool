@@ -50,13 +50,20 @@ class ScheduleInput extends Component {
         return false;
     }
 
-    onCheck(day, hour, b) {
+    sort(a, b) {
+        return a - b;
+    }
+
+    onCheck(day, hour, check) {
         const days = this.state.days;
-        if (b) {
+        if (check) {
             if (!days[day]) {
                 days[day] = [];
             }
-            if (days[day].indexOf(hour) === -1) days[day].push(hour);
+            if (days[day].indexOf(hour) === -1) {
+                days[day].push(hour);
+                days[day].sort((a, b) => a - b);
+            }
         } else {
             if (days[day]) {
                 const index = days[day].indexOf(hour);
