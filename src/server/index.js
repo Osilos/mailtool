@@ -18,6 +18,8 @@ app.use(cors());
 
 app.use(express.static('public'));
 
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 app.get('*', handleRequest);
 
 app.listen(3000, () => {

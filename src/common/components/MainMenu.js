@@ -17,11 +17,12 @@ const toolBarStyle = {
 
 class MainMenu extends Component {
     isHomeActive(match, location) {
+        console.log(location);
+        if (location.pathname === '/' || location.pathname === '') return true;
         if (!match) {
             return false;
         }
         if (location.pathname === match.path) return true;
-        if (location.pathname === '/') return true;
         return false;
     }
 
