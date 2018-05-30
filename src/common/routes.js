@@ -9,6 +9,11 @@ const routes = [
         component: Home
     },
     {
+        path: '/home',
+        exact: true,
+        component: Home
+    },
+    {
         path: '/template/:name',
         exact: true,
         component: TemplateForm,
