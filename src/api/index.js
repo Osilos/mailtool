@@ -20,7 +20,7 @@ app.get('/demo', (req, res) => {
     const data = {
         title: 'Demo Mail',
         content:
-            'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, je suis Flavien %%{"type":"schedule", "id": "planning"}%%',
+            'Bonjour %%{"type":"text", "id": "name", "default" : "etudiant"}%%, %%{"type":"space"}%% je suis Flavien %%{"type":"schedule", "id": "planning"}%%',
         form: {}
     };
     res.send(data);

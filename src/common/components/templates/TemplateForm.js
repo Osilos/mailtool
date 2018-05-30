@@ -6,21 +6,7 @@ import { green, red, orange } from 'material-ui/colors';
 import TextInput from './TextInput';
 import { Button } from 'material-ui';
 import ScheduleInput from './ScheduleInput';
-import weekDays from '../constants/weekDays';
-
-const titleStyle = {
-    backgroundColor: green['600'],
-    height: '50px'
-};
-
-const deleteButton = {
-    backgroundColor: red['600'],
-    height: '50px'
-};
-
-const editButton = {
-    backgroundColor: orange['600']
-};
+import weekDays from '../../constants/weekDays';
 
 const copyButtonStyle = {
     marginTop: '50px'
@@ -30,60 +16,9 @@ class TemplateForm extends Component {
     constructor(props) {
         super();
 
-        if (__isBrowser__) {
-            this.data = window.__INITIAL_DATA__;
-            delete window.__INITIAL_DATA__;
-        } else {
-            this.data = props.staticContext.data;
-        }
-
-        if (this.data) {
-            this.inputs = this.generateInputs(this.data.content);
-        }
-
         this.state = {
-            content: 'Generating content...',
-            values: {},
-            loading: this.data ? false : true
+            values: {}
         };
-
-        this.getInitialData = this.getTemplateData.bind(this);
-    }
-
-    componentWillMount() {
-        if (this.data) {
-            this.setState({
-                content: this.generateContent(this.data.content),
-                loading: false
-            });
-        }
-    }
-
-    componentDidMount() {
-        if (!this.data) {
-            this.getInitialData(this.props.match.params.name);
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.match.params.name !== this.props.match.params.name) {
-            this.getInitialData(this.props.match.params.name);
-        }
-    }
-
-    getTemplateData(name) {
-        this.setState(() => ({
-            loading: true
-        }));
-
-        this.props.getInitialData(name).then(data => {
-            this.data = data;
-            this.inputs = this.generateInputs(this.data.content);
-            this.setState(() => ({
-                content: this.generateContent(this.data.content),
-                loading: false
-            }));
-        });
     }
 
     generateContent(content) {
@@ -101,6 +36,9 @@ class TemplateForm extends Component {
                     value = parsedinput.default;
                 }
                 switch (parsedinput.type) {
+                    case 'space':
+                        return <br key={i} />;
+                        break;
                     case 'text':
                         return <span key={i}>{value}</span>;
                         break;
@@ -173,6 +111,8 @@ class TemplateForm extends Component {
                         onChange={this.handleScheduleChange.bind(this)}
                     />
                 );
+            case 'space':
+                return '';
             default:
                 throw 'Sorry we run I a problem, please reload the page. INFO : no match type for ' +
                     input.type;
@@ -184,52 +124,9 @@ class TemplateForm extends Component {
         values[e.target.id] = e.target.value;
         this.setState(() => {
             return {
-                values: values,
-                content: this.generateContent(this.data.content)
+                values: values
             };
         });
-    }
-
-    getHeader(title) {
-        return (
-            <Grid container item xs={12}>
-                <Grid
-                    className="template-header"
-                    item
-                    container
-                    xs={2}
-                    justify="center"
-                    alignItems="center"
-                    style={editButton}
-                >
-                    <Button fullWidth={true}>Edit</Button>
-                </Grid>
-                <Grid
-                    className="template-header"
-                    item
-                    container
-                    xs={2}
-                    justify="center"
-                    alignItems="center"
-                    style={deleteButton}
-                >
-                    <Button fullWidth={true}>Delete</Button>
-                </Grid>
-                <Grid
-                    className="template-header"
-                    item
-                    container
-                    xs={8}
-                    justify="center"
-                    alignItems="center"
-                    style={titleStyle}
-                >
-                    <Typography align="center" variant={'title'}>
-                        {title}
-                    </Typography>
-                </Grid>
-            </Grid>
-        );
     }
 
     handleButtonCopy() {
@@ -260,25 +157,20 @@ class TemplateForm extends Component {
         values[id] = value;
         this.setState(() => {
             return {
-                values: values,
-                content: this.generateContent(this.data.content)
+                values: values
             };
         });
     }
 
     render() {
-        if (this.state.loading) {
-            this.getHeader('Loading...');
-        }
+        const content = this.generateContent(this.props.content);
+        const inputs = this.generateInputs(this.props.content);
 
-        return this.state.loading ? (
-            this.getHeader('loading')
-        ) : (
+        return (
             <Grid container item xs={12}>
-                {this.getHeader(this.data.title)}
                 <Grid item xs={4}>
                     <Paper square elevation={5} className="sideForm">
-                        {this.inputs.map(item => this.createInput(item))}
+                        {inputs.map(item => this.createInput(item))}
                     </Paper>
                 </Grid>
                 <Grid item xs={8}>
@@ -288,7 +180,7 @@ class TemplateForm extends Component {
                         className="mailContainer"
                         id="mailContent"
                     >
-                        {this.state.content}
+                        {content}
 
                         <Button
                             onClick={this.handleButtonCopy.bind(this)}

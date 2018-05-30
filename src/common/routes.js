@@ -1,5 +1,6 @@
-import TemplateForm from './components/TemplateForm';
-import Home from './components/Home';
+import TemplateForm from './components/templates/TemplateForm';
+import Home from './components/pages/Home';
+import Demo from './components/pages/Demo';
 import { fetchTemplateData } from './api';
 
 const routes = [
@@ -12,6 +13,12 @@ const routes = [
         path: '/home',
         exact: true,
         component: Home
+    },
+    {
+        path: '/demo',
+        exact: true,
+        component: Demo,
+        getInitialData: (path = '') => fetchTemplateData('demo')
     },
     {
         path: '/template/:name',

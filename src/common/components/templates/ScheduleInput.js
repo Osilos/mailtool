@@ -4,7 +4,7 @@ import { FormLabel } from 'material-ui';
 import { Checkbox } from 'material-ui';
 import { FormGroup } from 'material-ui';
 import PropTypes from 'prop-types';
-import weekDays from '../constants/weekDays';
+import weekDays from '../../constants/weekDays';
 
 const checkboxStyle = {
     width: '20px',

@@ -17,7 +17,6 @@ const toolBarStyle = {
 
 class MainMenu extends Component {
     isHomeActive(match, location) {
-        console.log(location);
         if (location.pathname === '/' || location.pathname === '') return true;
         if (!match) {
             return false;
@@ -55,7 +54,7 @@ class MainMenu extends Component {
                             </NavLink>
                             <NavLink
                                 activeStyle={{ color: 'white' }}
-                                to="/template/demo"
+                                to="/demo"
                             >
                                 <Button style={elementStyle}>Demo</Button>
                             </NavLink>
