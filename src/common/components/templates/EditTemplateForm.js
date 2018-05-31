@@ -20,30 +20,88 @@ const chipsStyle = {
 class EditTemplateForm extends Component {
     constructor(props) {
         super();
+
+        this.state = {
+            inputDrage: null
+        };
+
+        this.chipOnMouseUp = this.chipOnMouseUp.bind(this);
+        this.chipOnMouseDown = this.chipOnMouseDown.bind(this);
+        this.chipOnMouseLeave = this.chipOnMouseLeave.bind(this);
+        this.chipOnMouseMove = this.chipOnMouseMove.bind(this);
     }
 
     generateContent(content) {
         const inputs = content.split('%%');
         let i = 0;
-        return inputs.map(input => {
+        return inputs.map(text => {
             if (i++ % 2 == 0) {
-                return <span key={i}>{input}</span>;
+                const words = text.split(' ');
+                return words.map((word, index) => {
+                    return <span key={word + index}>{word} </span>;
+                });
             } else {
-                let parsedinput = JSON.parse(input);
+                let parsedinput = JSON.parse(text);
                 if (parsedinput.type === 'space') return <br key={i} />;
                 return (
                     <Chip
                         style={chipsStyle}
                         key={i}
                         label={parsedinput.type + ' : ' + parsedinput.id}
+                        onMouseDown={this.chipOnMouseDown}
+                        onMouseUp={this.chipOnMouseUp}
+                        onMouseLeave={this.chipOnMouseLeave}
+                        onMouseMove={this.chipOnMouseMove}
                     />
                 );
             }
         });
     }
 
+    chipOnMouseMove(e) {
+        const chip =
+            e.target.nodeName === 'div' ? e.target : e.target.parentElement;
+        if (this.state.inputDrag === chip) {
+            //e.target.style.left
+            chip.style.left = e.clientX - 30 + 'px';
+            chip.style.top = e.clientY - 15 + 'px';
+        }
+    }
+
+    chipOnMouseDown(e) {
+        const chip =
+            e.target.nodeName === 'DIV' ? e.target : e.target.parentElement;
+        this.setState({ inputDrag: chip });
+        chip.style.position = 'absolute';
+        chip.style.left = e.clientX - 30 + 'px';
+        chip.style.top = e.clientY - 15 + 'px';
+
+        console.log(e.clientX);
+    }
+
+    chipOnMouseUp(e) {
+        const chip =
+            e.target.nodeName === 'DIV' ? e.target : e.target.parentElement;
+        if (this.state.inputDrag === chip) {
+            this.setState({ inputDrag: null });
+        }
+    }
+
+    chipOnMouseLeave(e) {
+        const chip =
+            e.target.nodeName === 'div' ? e.target : e.target.parentElement;
+        if (this.state.inputDrag === chip) {
+            console.log('mouse leave chip');
+            this.setState({ inputDrag: null });
+        }
+    }
+
+    getContent(content) {
+        return this.generateContent(content);
+    }
+
     render() {
-        const content = this.generateContent(this.props.content);
+        const content = this.getContent(this.props.content);
         //const inputs = this.generateInputs(this.props.content);
 
         return (
