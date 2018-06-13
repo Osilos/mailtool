@@ -87,6 +87,10 @@ class Demo extends Component {
         });
     }
 
+    handleUpdateContent(content) {
+        this.setState({ content: content });
+    }
+
     render() {
         return (
             <Grid container item xs={12}>
@@ -110,7 +114,10 @@ class Demo extends Component {
                     </Typography>
                 </Grid>
                 {this.state.edit ? (
-                    <EditTemplateForm content={this.state.content} />
+                    <EditTemplateForm
+                        content={this.state.content}
+                        updateContent={this.handleUpdateContent.bind(this)}
+                    />
                 ) : (
                     <TemplateForm content={this.state.content} />
                 )}
