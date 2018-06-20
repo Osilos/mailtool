@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Chip } from 'material-ui';
+import React, { Component } from "react";
+import { Chip } from "material-ui";
 
 class MovedInput extends Component {
     constructor() {
@@ -12,11 +12,11 @@ class MovedInput extends Component {
     }
 
     componentWillMount() {
-        document.addEventListener('mousemove', this.onMouseMove);
+        document.addEventListener("mousemove", this.onMouseMove);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousemove', this.onMouseMove);
+        document.removeEventListener("mousemove", this.onMouseMove);
     }
 
     onMouseMove(e) {
@@ -28,16 +28,17 @@ class MovedInput extends Component {
 
     render() {
         const style = {
-            position: 'absolute',
-            left: this.state.x + 'px',
-            top: this.state.y + 'px'
+            position: "absolute",
+            left: this.state.x + "px",
+            top: this.state.y + "px",
+            opacity: "0.75"
         };
 
         return (
             <Chip
                 id="moved"
                 style={style}
-                label={this.props.type + ' : ' + this.props.name}
+                label={this.props.type + " : " + this.props.name}
             />
         );
     }

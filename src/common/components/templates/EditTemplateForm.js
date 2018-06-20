@@ -1,33 +1,28 @@
-import React, { Component } from 'react';
-import Grid from 'material-ui/Grid';
-import AppBar from 'material-ui/AppBar';
-import { Typography, Paper, Snackbar, TextField } from 'material-ui';
-import { green, red, orange } from 'material-ui/colors';
-import TextInput from './TextInput';
-import { Button } from 'material-ui';
-import ScheduleInput from './ScheduleInput';
-import weekDays from '../../constants/weekDays';
-import { Chip } from 'material-ui';
-import MovedInput from './MovedInput';
+import React, { Component } from "react";
+import Grid from "material-ui/Grid";
+import AppBar from "material-ui/AppBar";
+import { Typography, Paper, Snackbar, TextField } from "material-ui";
+import { green, red, orange } from "material-ui/colors";
+import TextInput from "./TextInput";
+import { Button } from "material-ui";
+import ScheduleInput from "./ScheduleInput";
+import weekDays from "../../constants/weekDays";
+import { Chip } from "material-ui";
+import MovedInput from "./MovedInput";
 
 const mailStyle = {
-    cursor: 'text'
+    cursor: "text"
 };
 
 const chipsStyle = {
-    cursor: 'move'
-};
-
-const movingChipStyle = {
-    position: 'absolute',
-    backgroundColor: 'green'
+    cursor: "move"
 };
 
 const movedChipStyle = {
-    backgroundColor: 'red'
+    border: "dotted green 2px"
 };
 
-const editStateEnum = ['IDLE', 'TEXT', 'INPUT'];
+const editStateEnum = ["IDLE", "TEXT", "INPUT"];
 
 class EditTemplateForm extends Component {
     constructor(props) {
@@ -40,24 +35,24 @@ class EditTemplateForm extends Component {
         };
 
         this.lastIndexPosition = -1;
-
+        this.side = false;
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.chipOnMouseDown = this.chipOnMouseDown.bind(this);
     }
 
     componentWillMount() {
-        document.addEventListener('mouseup', this.onMouseUp);
-        document.addEventListener('mousemove', this.onMouseMove);
+        document.addEventListener("mouseup", this.onMouseUp);
+        document.addEventListener("mousemove", this.onMouseMove);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mouseup', this.onMouseUp);
-        document.removeEventListener('mousemove', this.onMouseMove);
+        document.removeEventListener("mouseup", this.onMouseUp);
+        document.removeEventListener("mousemove", this.onMouseMove);
     }
 
     getInputs(content) {
-        const contents = content.split('%%');
+        const contents = content.split("%%");
         let inputs = [];
         contents.forEach(item => {
             if (this.isJson(item)) {
@@ -80,7 +75,7 @@ class EditTemplateForm extends Component {
     }
 
     generateContentIdle(content) {
-        const inputs = content.split('%%');
+        const inputs = content.split("%%");
         let i = 0;
         return inputs.map(text => {
             if (this.isJson(text)) {
@@ -92,7 +87,7 @@ class EditTemplateForm extends Component {
     }
 
     generateContentInput(content) {
-        const inputs = content.split('%%');
+        const inputs = content.split("%%");
         let i = 0;
         return inputs.map((text, index) => {
             if (this.isJson(text)) {
@@ -103,7 +98,7 @@ class EditTemplateForm extends Component {
                     return this.getInputAsChip(text, i++);
                 }
             } else {
-                const words = text.split(' ');
+                const words = text.split(" ");
                 return words.map(word => {
                     return <span key={i++}>{word} </span>;
                 });
@@ -116,9 +111,9 @@ class EditTemplateForm extends Component {
         return (
             <Chip
                 style={movedChipStyle}
-                key={'moved'}
+                key={"moved"}
                 id="moved"
-                label={parsedinput.type + ' : ' + parsedinput.id}
+                label={parsedinput.type + " : " + parsedinput.id}
                 onMouseDown={this.chipOnMouseDown}
             />
         );
@@ -126,20 +121,20 @@ class EditTemplateForm extends Component {
 
     getInputAsChip(input, index = 0) {
         let parsedinput = JSON.parse(input);
-        if (parsedinput.type === 'space') return <br key={index} />;
+        if (parsedinput.type === "space") return <br key={index} />;
         return (
             <Chip
                 style={chipsStyle}
                 key={index}
                 id={parsedinput.id}
-                label={parsedinput.type + ' : ' + parsedinput.id}
+                label={parsedinput.type + " : " + parsedinput.id}
                 onMouseDown={this.chipOnMouseDown}
             />
         );
     }
 
     isJson(text) {
-        return text[0] === '{' && text[text.length - 1] === '}';
+        return text[0] === "{" && text[text.length - 1] === "}";
     }
 
     isInside(point, rect) {
@@ -154,7 +149,7 @@ class EditTemplateForm extends Component {
     onMouseMove(e) {
         if (this.state.editState === editStateEnum[2]) {
             const mousePosition = { x: e.clientX, y: e.clientY };
-            const domContainer = document.getElementById('mailContent');
+            const domContainer = document.getElementById("mailContent");
             if (
                 this.isInside(
                     mousePosition,
@@ -166,7 +161,7 @@ class EditTemplateForm extends Component {
                     const child = childs[i];
                     if (
                         child.id != this.state.inputDragId &&
-                        child.id != 'moved'
+                        child.id != "moved"
                     ) {
                         if (
                             this.isInside(
@@ -174,11 +169,22 @@ class EditTemplateForm extends Component {
                                 child.getBoundingClientRect()
                             )
                         ) {
-                            if (i != this.lastIndexPosition) {
+                            let side =
+                                mousePosition.x -
+                                    (child.getBoundingClientRect().x +
+                                        child.getBoundingClientRect().width /
+                                            2) <
+                                0;
+                            if (
+                                i != this.lastIndexPosition &&
+                                this.side != side
+                            ) {
                                 this.lastIndexPosition = i;
+                                this.lastSide = side;
                                 this.setInputPositionAt(
                                     i,
-                                    this.getInput(this.state.inputDragId)
+                                    this.getInput(this.state.inputDragId),
+                                    side
                                 );
                             }
                             break;
@@ -189,27 +195,32 @@ class EditTemplateForm extends Component {
         }
     }
 
-    setInputPositionAt(position, input) {
-        const content = this.props.content.split('%%');
+    setInputPositionAt(position, input, before) {
+        const content = this.props.content.split("%%");
         let i = 0;
-        let newContent = '';
+        let offset = before ? -1 : 0;
+        let newContent = "";
         for (var u = 0; u < content.length; u++) {
             const el = content[u];
             if (this.isJson(el)) {
                 const elJson = JSON.parse(el);
-                if (elJson.id != this.state.inputDragId) {
-                    newContent += '%%' + el + '%% ';
+                if (position + offset === i) {
+                    newContent += "%%" + JSON.stringify(input) + "%% ";
                 }
+                if (elJson.id != this.state.inputDragId) {
+                    newContent += "%%" + el + "%% ";
+                }
+
                 i++;
             } else {
-                const words = el.split(' ');
+                const words = el.split(" ");
                 for (let y = 0; y < words.length; y++) {
                     const word = words[y];
-
-                    newContent += word + ' ';
-                    if (position === i) {
-                        newContent += '%%' + JSON.stringify(input) + '%% ';
+                    if (position + offset === i) {
+                        newContent += "%%" + JSON.stringify(input) + "%% ";
                     }
+                    newContent += word + " ";
+
                     i++;
                 }
             }
@@ -219,7 +230,7 @@ class EditTemplateForm extends Component {
 
     chipOnMouseDown(e) {
         const chip =
-            e.target.nodeName === 'DIV' ? e.target : e.target.parentElement;
+            e.target.nodeName === "DIV" ? e.target : e.target.parentElement;
         this.setState({ inputDragId: chip.id, editState: editStateEnum[2] });
     }
 
@@ -249,7 +260,7 @@ class EditTemplateForm extends Component {
             <Grid container item xs={12}>
                 <Grid item xs={4}>
                     <Paper square elevation={5} className="sideForm">
-                        {'here go input'}
+                        {"here go input"}
                     </Paper>
                 </Grid>
                 <Grid item xs={8} style={mailStyle}>

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React, { Component } from "react";
+import { render } from "react-dom";
+import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
+import Grid from "material-ui/Grid";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import MainMenu from './pages/MainMenu';
-import routes from '../routes';
+import MainMenu from "./pages/MainMenu";
+import routes from "../routes";
 
 class App extends Component {
     constructor(props) {
